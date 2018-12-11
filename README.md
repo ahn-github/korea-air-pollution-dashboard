@@ -4,7 +4,7 @@ Application for monitoring korea air pollution
 
 #### Preparations
 
-It use open-api service- ![link](https://www.data.go.kr/dataset/15000581/openapi.do). Therefore, you need "service key" for get response data.
+It use [this open-api-service(data.go.kr)](https://www.data.go.kr/dataset/15000581/openapi.do). Therefore, you need "service key" for get response data.
 Then, make 'secret.json' file in the project directory path.
 Secret.json should be look like below
 
