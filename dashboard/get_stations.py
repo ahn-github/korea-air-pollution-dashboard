@@ -2,12 +2,12 @@ import xml.etree.ElementTree as ET
 import pandas as pd
 import requests
 import sqlite3
-import datetime as dt
 import os
 import json
 from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 def get_env_variable(setting):
     secret_file = os.path.join(BASE_DIR, 'secret.json')
@@ -20,12 +20,6 @@ def get_env_variable(setting):
     except KeyError:
         error_msg = "Set the {0} environment variable".format(setting)
         raise ImproperlyConfigured(error_msg)
-
-def my_to_datetime(date_str):
-    if date_str[11:13] != '24':
-        return pd.to_datetime(date_str, format='%Y-%m-%d %H:%M')
-    date_str = date_str[0:11] + '00'
-    return pd.to_datetime(date_str, format='%Y-%m-%d %H:%M') + dt.timedelta(days=1)
 
 
 if __name__ == "__main__":

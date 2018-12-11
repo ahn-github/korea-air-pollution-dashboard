@@ -3,6 +3,7 @@ from .models import AirKoreaStations, AirKoreaData
 from datetime import datetime as dt
 from djgeojson.views import GeoJSONLayerView
 from datetime import timedelta
+import json
 from django.db.models import Count
 
 # def datetime_handler(x):
@@ -32,5 +33,6 @@ class MapLayer(GeoJSONLayerView):
 
 def detail(request, station_name):
     recent_24h_data = AirKoreaData.objects.filter(stnname=station_name).order_by('-datatime')[:24].values()
-    recent_24h_data = reversed(recent_24h_data)
+    recent_24h_data = list(reversed(recent_24h_data))
+
     return render(request, "dashboard/detail.html", {"station_name" : station_name, 'recent_24h_data' : recent_24h_data})
