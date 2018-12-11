@@ -52,6 +52,6 @@ if __name__ == "__main__":
     df['geom'] = [str({'type': 'Point', 'coordinates': [float(y), float(x)]}) for y, x in zip(df.dmX, df.dmY)]
     df.index += 1
     df = df.reset_index()
-    con = sqlite3.connect("/Users/jyj0729/PycharmProjects/mysite/db.sqlite3")
+    con = sqlite3.connect(os.path.join(BASE_DIR, 'db.sqlite3'))
     df.to_sql('dashboard_airkoreastations', con=con, if_exists='replace', index=False)
     con.close()
