@@ -6,7 +6,7 @@ Application for monitoring korea air pollution
 
 It use [this open-api-service(data.go.kr)](https://www.data.go.kr/dataset/15000581/openapi.do). Therefore, you need "service key" for get response data.
 Then, make 'secret.json' file in the project directory path.
-Secret.json should be look like below
+Secret.json should look like below
 
 ```
 {
@@ -17,7 +17,7 @@ Secret.json should be look like below
 
 #### requirements
 
-pip install below pachakes
+pip install below pachages
 * django
 * django-leaflet
 * django-geojson

@@ -57,4 +57,4 @@ def list_table(request, status):
 
     stations = AirKoreaStations.objects.filter(stationname__in=stations_list)
 
-    return render(request, "dashboard/list.html", {"Stations": stations})
+    return render(request, "dashboard/list.html", {"status": status, "Stations": stations})

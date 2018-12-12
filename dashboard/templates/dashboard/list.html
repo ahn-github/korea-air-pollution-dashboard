@@ -8,28 +8,36 @@ Clean Stations
 {% block main %}
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-    <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th>Station Name</th>
-              <th>Address</th>
-              <th>Category</th>
-              <th>Link</th>
-            </tr>
-          </thead>
-          <tbody>
-          {% for data in Stations %}
-            <tr>
-              <td>{{data.stationname}}</td>
-              <td>{{data.addr}}</td>
-              <td>{{data.mangname}}</td>
-              <td><a href="{% url 'detail' data.stationname%}">데이터 보기</a></td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      </div>
+    <div class="row pt-2 px-2">
+    <h2>측정소 리스트 : {% if status == 'total' %} 전체 {% endif %}
+            {% if status == 'clean' %} 좋음 (통합대기환경등급) {% endif %}
+            {% if status == 'polluted' %} 나쁨 또는 매우 나쁨 (통합대기환경등급) {% endif %}
+            {% if status == 'failure' %} 데이터 미수신 {% endif %} </h2>
+    </div>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <div class="table-responsive">
+            <table class="table table-striped table-sm">
+              <thead>
+                <tr>
+                  <th>Station Name</th>
+                  <th>Address</th>
+                  <th>Category</th>
+                  <th>Link</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for data in Stations %}
+                <tr>
+                  <td>{{data.stationname}}</td>
+                  <td>{{data.addr}}</td>
+                  <td>{{data.mangname}}</td>
+                  <td><a href="{% url 'detail' data.stationname%}">데이터 보기</a></td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+    </div>
 </main>
 
 {% endblock %}
