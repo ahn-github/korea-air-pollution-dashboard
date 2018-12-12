@@ -1,0 +1,35 @@
+{% extends "dashboard/layout.html" %}
+
+{% block title %}
+Clean Stations
+{% endblock %}
+
+
+{% block main %}
+
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th>Station Name</th>
+              <th>Address</th>
+              <th>Category</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for data in Stations %}
+            <tr>
+              <td>{{data.stationname}}</td>
+              <td>{{data.addr}}</td>
+              <td>{{data.mangname}}</td>
+              <td><a href="{% url 'detail' data.stationname%}">데이터 보기</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+</main>
+
+{% endblock %}

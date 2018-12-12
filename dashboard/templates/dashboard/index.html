@@ -35,7 +35,7 @@
             L.geoJson(data, {
               onEachFeature: function onEachFeature(feature, layer) {
                 var props = feature.properties;
-                var content = `<h3>${props.stationname}</h3><p>${props.addr}</p><p>${props.item}</p><a href='${props.stationname}'>상세보기</a>`;
+                var content = `<h3>${props.stationname}</h3><p>${props.addr}</p><p>${props.item}</p><a href='detail/${props.stationname}'>상세보기</a>`;
                 layer.bindPopup(content);
             }}).addTo(map);
           });
@@ -110,6 +110,11 @@
                 </a>
               </li>
             </ul>
+              <br><br><br><br><br><br>
+              <br><br><br><br><br><br>
+              <br><br><br><br><br><br>
+              <br><br><br><br><br><br>
+              <small>Copyright 2018. YJUCHO. all rights reserved</small>
           </div>
         </nav>
 
@@ -117,35 +122,58 @@
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">Dashboard</h1>
           </div>
+
           <div class="container">
             <div class="row mb-3">
-                <div class="col-sm-4 py-2">
+                <div class="col-sm-3 py-2">
                     <div class="card bg-secondary text-white">
                         <div class="card-body bg-secondary">
                             <div class="rotate">
                                 <i class="fas fa-map-marker-alt text-uppercase"> Total stations</i>
                             </div>
                             <h1 class="display-6">{{ num_of_stations }}</h1>
+                            <div align="right">
+                                <a href="{% url 'list_table' 'total'%}" class="badge badge-secondary"> More.. </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 py-2">
+                <div class="col-sm-3 py-2">
                     <div class="card bg-light text-black">
                         <div class="card-body bg-light">
+                            <div class="rotate">
+                                <i class="fas fa-grin-beam text-uppercase"> clean stations</i>
+                            </div>
+                            <h1 class="display-6">{{ num_of_clean }}</h1>
+                            <div align="right">
+                                <a href="{% url 'list_table' 'clean'%}" class="badge badge-light"> More.. </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 py-2">
+                    <div class="card bg-dark text-white">
+                        <div class="card-body bg-dark">
+                            <div class="rotate">
+                                <i class="fas fa-dizzy	text-uppercase"> polluted stations </i>
+                            </div>
+                            <h1 class="display-6">{{ num_of_polluted }}</h1>
+                            <div align="right">
+                                <a href="{% url 'list_table' 'polluted'%}" class="badge badge-dark"> More.. </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 py-2">
+                    <div class="card bg-secondary text-white">
+                        <div class="card-body bg-secondary">
                             <div class="rotate">
                                 <i class="fas fa-exclamation-triangle text-uppercase"> failure stations</i>
                             </div>
                             <h1 class="display-6">{{ num_of_failure }}</h1>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4 py-2">
-                    <div class="card bg-dark text-white">
-                        <div class="card-body bg-dark">
-                            <div class="rotate">
-                                <i class="fas fa-wifi text-uppercase"> alive stations</i>
+                            <div align="right">
+                                <a href="{% url 'list_table' 'failure'%}" class="badge badge-secondary"> More.. </a>
                             </div>
-                            <h1 class="display-6">{{ num_of_alive }}</h1>
                         </div>
                     </div>
                 </div>
@@ -158,6 +186,7 @@
 
 
         </main>
+
       </div>
     </div>
 
@@ -173,6 +202,6 @@
     <script>
       feather.replace()
     </script>
-
   </body>
+
 </html>

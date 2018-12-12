@@ -5,6 +5,7 @@ from .models import AirKoreaStations
 
 urlpatterns = [
     url('data.geojson/', views.MapLayer.as_view(model=AirKoreaStations, properties=('stationname', 'addr', 'item')), name='data'),
-    path('<str:station_name>/', views.detail, name='detail'),
+    path('status/<str:status>/', views.list_table, name='list_table'),
+    path('detail/<str:station_name>/', views.detail, name='detail'),
     path('', views.index, name='index'),
 ]
