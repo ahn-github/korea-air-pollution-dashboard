@@ -1,4 +1,5 @@
 {% extends "dashboard/layout.html" %}
+{% load dashboard_extras %}
 
 {% block title %}
 Air Pollution - {{ station_name }}
@@ -21,6 +22,9 @@ Air Pollution - {{ station_name }}
       </button>
     </div>
   </div>
+  {% with recent_24h_data|last as last %}
+  <p>마지막 데이터 수신 시각 : {{ last.datatime }} </p>
+  {% endwith %}
   <div class="row">
     <div class = col-sm-2>
       <h6>미세먼지 등급</h6>
@@ -90,8 +94,6 @@ Air Pollution - {{ station_name }}
     {% endwith %}
   </div>
   <canvas class="my-4 w-100" id="myChart" width="900" height="250"></canvas>
-
-
 
 </main>
 

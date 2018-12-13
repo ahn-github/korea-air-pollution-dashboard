@@ -22,9 +22,8 @@ class AirKoreaData(models.Model):
     pm25value = models.IntegerField(db_column='pm25Value', blank=True, null=True)  # Field name made lowercase.
     pm25value24 = models.IntegerField(db_column='pm25Value24', blank=True, null=True)  # Field name made lowercase.
     so2grade = models.IntegerField(db_column='so2Grade', blank=True, null=True)  # Field name made lowercase.
-    so2value = models.IntegerField(db_column='so2Value', blank=True, null=True)  # Field name made lowercase.
-    stnname = models.TextField(db_column='stnName', blank=True, null=True)  # Field name made lowercase.
-    stnaddr = models.TextField(db_column='stnAddr', blank=True, null=True)  # Field name made lowercase.
+    so2value = models.TextField(db_column='so2Value', blank=True, null=True)  # Field name made lowercase.
+    stnfk = models.ForeignKey(db_column='stnfk', to='AirKoreaStations', on_delete=models.CASCADE, null=True, blank=True)
 
 
 

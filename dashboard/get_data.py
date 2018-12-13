@@ -43,16 +43,16 @@ if __name__ == "__main__":
 
     con = sqlite3.connect(os.path.join(BASE_DIR, 'db.sqlite3'))
     df = pd.read_sql("select * from dashboard_airkoreastations;", con)
-    df = df[['stationName', 'addr']]
+    df = df[['stationName', 'ID']]
     df = df.set_index('stationName')
     df = df.to_dict()
-    stnName_dict = df['addr']
+    stnName_dict = df['ID']
 
     for idx, stnName in enumerate(stnName_dict.keys()):
         user_agent_url = 'http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/' + \
                          'getMsrstnAcctoRltmMesureDnsty?serviceKey=' + OPEN_API_KEY + \
                          '&numOfRows=9999&pageSize=9999&pageNo=1' + \
-                         '&startPage=1&stationName=' + stnName + '&dataTerm=3MONTH&ver=1.3'
+                         '&startPage=1&stationName=' + stnName + '&dataTerm=DAILY&ver=1.3'
         xml_data = requests.get(user_agent_url).content
         root = ET.XML(xml_data)
         df = []
@@ -64,8 +64,7 @@ if __name__ == "__main__":
                         parsed[col] = item.find(col).text
                     df.append(parsed)
         df = pd.DataFrame(df)
-        df['stnName'] = stnName
-        df['stnAddr'] = stnName_dict[stnName]
+        df['stnfk'] = stnName_dict[stnName]
         try:
             df.dataTime = df.dataTime.apply(my_to_datetime)
             df.to_sql('dashboard_airkoreadata', con=con, if_exists='append', index=False)

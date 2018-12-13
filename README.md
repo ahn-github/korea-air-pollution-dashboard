@@ -17,7 +17,7 @@ Secret.json should look like below
 
 #### requirements
 
-pip install below pachages
+pip install below packages
 * django
 * django-leaflet
 * django-geojson

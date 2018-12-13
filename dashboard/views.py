@@ -8,14 +8,14 @@ import json
 
 def index(request):
     num_of_stations = AirKoreaStations.objects.count()
-    recent_hour = dt.now().replace(microsecond=0,second=0,minute=0)
-    num_of_alive = AirKoreaData.objects.filter(datatime__range=(recent_hour, recent_hour + timedelta(hours=1))).\
+    recent_hour = dt.now().replace(microsecond=0,second=0,minute=0, hour=0)
+    num_of_alive = AirKoreaData.objects.filter(datatime__range=(recent_hour - timedelta(days=1), recent_hour)).\
         values('stnname').distinct().count()
     num_of_failure = num_of_stations - num_of_alive
-    num_of_polluted = AirKoreaData.objects.filter(datatime__range=(recent_hour, recent_hour + timedelta(hours=1))). \
-        filter(khaigrade__gt=2).count()
-    num_of_clean = AirKoreaData.objects.filter(datatime__range=(recent_hour, recent_hour + timedelta(hours=1))). \
-        filter(khaigrade__lt=2).count()
+    num_of_polluted = AirKoreaData.objects.filter(datatime__range=(recent_hour - timedelta(days=1), recent_hour)). \
+        filter(khaigrade__gt=2).values('stnname').distinct().count()
+    num_of_clean = AirKoreaData.objects.filter(datatime__range=(recent_hour - timedelta(days=1), recent_hour)). \
+        filter(khaigrade__lt=2). values('stnname').distinct().count()
 
     context = {
         "num_of_stations": num_of_stations,
@@ -42,15 +42,16 @@ def detail(request, station_name):
 
 
 def list_table(request, status):
-    recent_hour = dt.now().replace(microsecond=0,second=0,minute=0)
+    recent_hour = dt.now().replace(microsecond=0, second=0, minute=0, hour=0)
     if status == 'polluted':
-        stations_list = AirKoreaData.objects.filter(datatime__range=(recent_hour, recent_hour + timedelta(hours=1))). \
-            filter(khaigrade__gt=2).values('stnname')
+        stations_list = AirKoreaData.objects.filter(datatime__range=(recent_hour - timedelta(days=1), recent_hour)). \
+            filter(khaigrade__gt=2).values('stnname').distinct()
     elif status == 'clean':
-        stations_list = AirKoreaData.objects.filter(datatime__range=(recent_hour, recent_hour + timedelta(hours=1))). \
-            filter(khaigrade__lt=2).values('stnname')
+        stations_list = AirKoreaData.objects.filter(datatime__range=(recent_hour - timedelta(days=1), recent_hour)). \
+            filter(khaigrade__lt=2).values('stnname').distinct()
     elif status == 'failure':
-        stations_list = AirKoreaData.objects.filter(datatime__range=(recent_hour, recent_hour + timedelta(hours=1))).values('stnname')
+        stations_list = AirKoreaData.objects.filter(datatime__range=(recent_hour - timedelta(days=1), recent_hour)).\
+            values('stnname').distinct()
         stations_list = AirKoreaStations.objects.exclude(stationname__in=stations_list).values('stationname')
     else :
         stations_list = AirKoreaStations.objects.values('stationname')
