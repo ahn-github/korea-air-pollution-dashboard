@@ -52,7 +52,7 @@ if __name__ == "__main__":
         user_agent_url = 'http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/' + \
                          'getMsrstnAcctoRltmMesureDnsty?serviceKey=' + OPEN_API_KEY + \
                          '&numOfRows=9999&pageSize=9999&pageNo=1' + \
-                         '&startPage=1&stationName=' + stnName + '&dataTerm=DAILY&ver=1.3'
+                         '&startPage=1&stationName=' + stnName + '&dataTerm=3MONTH&ver=1.3'
         xml_data = requests.get(user_agent_url).content
         root = ET.XML(xml_data)
         df = []

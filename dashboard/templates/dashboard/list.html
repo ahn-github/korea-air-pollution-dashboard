@@ -21,6 +21,7 @@ Clean Stations
                   <th>Station Name</th>
                   <th>Address</th>
                   <th>Category</th>
+                  <th>통합대기환경지수</th>
                   <th>Link</th>
                 </tr>
               </thead>
@@ -30,6 +31,7 @@ Clean Stations
                   <td>{{data.stationname}}</td>
                   <td>{{data.addr}}</td>
                   <td>{{data.mangname}}</td>
+                  <td>{% with d=data.airkoreadata_set.last %} {{ d.khaivalue }} {% endwith %}</td>
                   <td><a href="{% url 'detail' data.stationname%}">데이터 보기</a></td>
                 </tr>
               {% endfor %}

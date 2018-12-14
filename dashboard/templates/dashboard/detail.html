@@ -10,7 +10,7 @@ Air Pollution - {{ station_name }}
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">{{ station_name }}</h1>
+    <h1 class="h2">{{ station.stationname }}</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
         <button class="btn btn-sm btn-outline-secondary">Share</button>
@@ -23,7 +23,9 @@ Air Pollution - {{ station_name }}
     </div>
   </div>
   {% with recent_24h_data|last as last %}
-  <p>마지막 데이터 수신 시각 : {{ last.datatime }} </p>
+  <p>측정소 주소 : {{ station.addr }}</p>
+  <p>측정망 : {{station.mangname }}</p>
+  <p>마지막 데이터 수신 시각 : {{ last.datatime }} </p> <br>
   {% endwith %}
   <div class="row">
     <div class = col-sm-2>

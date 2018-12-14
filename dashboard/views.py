@@ -7,20 +7,18 @@ import json
 
 
 def index(request):
-    num_of_stations = AirKoreaStations.objects.count()
-    recent_hour = dt.now().replace(microsecond=0,second=0,minute=0, hour=0)
-    num_of_alive = AirKoreaData.objects.filter(datatime__range=(recent_hour - timedelta(days=1), recent_hour)).\
-        values('stnname').distinct().count()
-    num_of_failure = num_of_stations - num_of_alive
-    num_of_polluted = AirKoreaData.objects.filter(datatime__range=(recent_hour - timedelta(days=1), recent_hour)). \
-        filter(khaigrade__gt=2).values('stnname').distinct().count()
-    num_of_clean = AirKoreaData.objects.filter(datatime__range=(recent_hour - timedelta(days=1), recent_hour)). \
-        filter(khaigrade__lt=2). values('stnname').distinct().count()
+    yesterday = dt.now().replace(microsecond=0,second=0,minute=0, hour=0)
+    num_of_stations = AirKoreaData.objects.filter(datatime__range=(yesterday - timedelta(days=1), yesterday)).\
+            values('stnfk').distinct()
+    num_of_failure = AirKoreaStations.objects.exclude(id__in=num_of_stations).values('stationname').count()
+    num_of_polluted = AirKoreaData.objects.filter(datatime__range=(yesterday - timedelta(days=1), yesterday)). \
+        filter(khaigrade__gt=2).values('stnfk').distinct().count()
+    num_of_clean = AirKoreaData.objects.filter(datatime__range=(yesterday - timedelta(days=1), yesterday)). \
+        filter(khaigrade__lt=2). values('stnfk').distinct().count()
 
     context = {
-        "num_of_stations": num_of_stations,
+        "num_of_stations": num_of_stations.count(),
         "num_of_failure": num_of_failure,
-        "num_of_alive": num_of_alive,
         "num_of_polluted": num_of_polluted,
         "num_of_clean": num_of_clean
     }
@@ -35,27 +33,28 @@ class MapLayer(GeoJSONLayerView):
 
 
 def detail(request, station_name):
-    recent_24h_data = AirKoreaData.objects.filter(stnname=station_name).order_by('-datatime')[:24].values()
+    station = AirKoreaStations.objects.filter(stationname = station_name).first()
+    recent_24h_data = AirKoreaData.objects.filter(stnfk=station.id).order_by('-datatime')[:24].values()
     recent_24h_data = list(reversed(recent_24h_data))
 
-    return render(request, "dashboard/detail.html", {"station_name": station_name, 'recent_24h_data': recent_24h_data})
+    return render(request, "dashboard/detail.html", {"station": station, 'recent_24h_data': recent_24h_data})
 
 
 def list_table(request, status):
-    recent_hour = dt.now().replace(microsecond=0, second=0, minute=0, hour=0)
+    yesterday = dt.now().replace(microsecond=0, second=0, minute=0, hour=0)
     if status == 'polluted':
-        stations_list = AirKoreaData.objects.filter(datatime__range=(recent_hour - timedelta(days=1), recent_hour)). \
-            filter(khaigrade__gt=2).values('stnname').distinct()
+        stations_list = AirKoreaData.objects.filter(datatime__range=(yesterday - timedelta(days=1), yesterday)). \
+            filter(khaigrade__gt=2).values('stnfk').distinct()
     elif status == 'clean':
-        stations_list = AirKoreaData.objects.filter(datatime__range=(recent_hour - timedelta(days=1), recent_hour)). \
-            filter(khaigrade__lt=2).values('stnname').distinct()
+        stations_list = AirKoreaData.objects.filter(datatime__range=(yesterday - timedelta(days=1), yesterday)). \
+            filter(khaigrade__lt=2).values('stnfk').distinct()
     elif status == 'failure':
-        stations_list = AirKoreaData.objects.filter(datatime__range=(recent_hour - timedelta(days=1), recent_hour)).\
-            values('stnname').distinct()
-        stations_list = AirKoreaStations.objects.exclude(stationname__in=stations_list).values('stationname')
+        stations_list = AirKoreaData.objects.filter(datatime__range=(yesterday - timedelta(days=1), yesterday)).\
+            values('stnfk').distinct()
+        stations_list = AirKoreaStations.objects.exclude(id__in=stations_list).values('id')
     else :
-        stations_list = AirKoreaStations.objects.values('stationname')
+        stations_list = AirKoreaStations.objects.values('id')
 
-    stations = AirKoreaStations.objects.filter(stationname__in=stations_list)
+    stations = AirKoreaStations.objects.filter(id__in=stations_list)
 
     return render(request, "dashboard/list.html", {"status": status, "Stations": stations})
