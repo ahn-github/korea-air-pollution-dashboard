@@ -2,7 +2,9 @@
 {% load dashboard_extras %}
 
 {% block title %}
-Air Pollution - {{ station_name }}
+{% with last=recent_data.last %}
+Air Pollution - {{ last.stnfk.stationname }}
+{% endwith %}
 {% endblock %}
 
 
@@ -10,7 +12,9 @@ Air Pollution - {{ station_name }}
 
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">{{ station.stationname }}</h1>
+    {% with last=recent_data.last %}
+    <h1 class="h2">{{ last.stnfk.stationname }}</h1>
+    {% endwith %}
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
         <button class="btn btn-sm btn-outline-secondary">Share</button>
@@ -22,17 +26,16 @@ Air Pollution - {{ station_name }}
       </button>
     </div>
   </div>
-  {% with recent_24h_data|last as last %}
-  <p>측정소 주소 : {{ station.addr }}</p>
-  <p>측정망 : {{station.mangname }}</p>
+
+  {% with last=recent_data.last %}
+  <p>측정소 주소 : {{ last.stnfk.addr }}</p>
+  <p>측정망 : {{ last.mangname }}</p>
   <p>마지막 데이터 수신 시각 : {{ last.datatime }} </p> <br>
-  {% endwith %}
   <div class="row">
     <div class = col-sm-2>
       <h6>미세먼지 등급</h6>
     </div>
     <div class = col-sm-2>
-      {% with recent_24h_data|last as last %}
       {% if last.pm10value <= 30 %}
       <div class="progress">
         <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">좋음</div>
@@ -59,13 +62,11 @@ Air Pollution - {{ station_name }}
       <div class="progress-bar bg-danger" role="progressbar" style="width: 25%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">매우나쁨</div>
     </div>
     {% endif %}
-    {% endwith %}
   </div>
     <div class = col-sm-2>
       <h6>초미세먼지 등급</h6>
     </div>
     <div class = col-sm-2>
-      {% with recent_24h_data|last as last %}
       {% if last.pm25value <= 15 %}
       <div class="progress">
         <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">좋음</div>
@@ -105,10 +106,10 @@ Air Pollution - {{ station_name }}
   var myChart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: [{% for data in recent_24h_data %}'{{ data.datatime }}',{% endfor %}],
+      labels: [{% for data in recent_data %}'{{ data.datatime }}',{% endfor %}],
       datasets: [{
         label: "PM2.5",
-        data: [{% for data in recent_24h_data %}'{{ data.pm25value }}',{% endfor %}],
+        data: [{% for data in recent_data %}'{{ data.pm25value }}',{% endfor %}],
         fill: false,
         backgroundColor: '#999',
         borderColor: '#999',
@@ -117,7 +118,7 @@ Air Pollution - {{ station_name }}
       },
       {
         label: "PM10",
-        data: [{% for data in recent_24h_data %}'{{ data.pm10value }}',{% endfor %}],
+        data: [{% for data in recent_data %}'{{ data.pm10value }}',{% endfor %}],
         fill: false,
         backgroundColor: '#007bff',
         borderColor: '#007bff',

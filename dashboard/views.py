@@ -33,11 +33,11 @@ class MapLayer(GeoJSONLayerView):
 
 
 def detail(request, station_name):
-    station = AirKoreaStations.objects.filter(stationname = station_name).first()
-    recent_24h_data = AirKoreaData.objects.filter(stnfk=station.id).order_by('-datatime')[:24].values()
-    recent_24h_data = list(reversed(recent_24h_data))
+    yesterday = dt.now().replace(microsecond=0, second=0, minute=0, hour=0)
+    recent_data = AirKoreaData.objects.filter(stnfk__stationname=station_name).\
+        filter(datatime__range=(yesterday - timedelta(days=1), yesterday)).order_by('datatime')
 
-    return render(request, "dashboard/detail.html", {"station": station, 'recent_24h_data': recent_24h_data})
+    return render(request, "dashboard/detail.html", {'recent_data': recent_data})
 
 
 def list_table(request, status):

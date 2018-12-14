@@ -1,6 +1,21 @@
 from django.db import models
 from djgeojson.fields import PointField
 
+class AirKoreaStations(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True, blank=True, null=False)  # Field name made lowercase.
+    addr = models.TextField(blank=True, null=True)
+    dmx = models.DecimalField(db_column='dmX', blank=True, null=True, decimal_places=10, max_digits=15)  # Field name made lowercase.
+    dmy = models.DecimalField(db_column='dmY', blank=True, null=True, decimal_places=10, max_digits=15)  # Field name made lowercase.
+    item = models.TextField(blank=True, null=True)
+    mangname = models.TextField(db_column='mangName', blank=True, null=True)  # Field name made lowercase.
+    map = models.TextField(blank=True, null=True)
+    oper = models.TextField(blank=True, null=True)
+    photo = models.TextField(blank=True, null=True)
+    stationname = models.TextField(db_column='stationName', blank=True, null=True)  # Field name made lowercase.
+    year = models.TextField(blank=True, null=True)
+    geom = PointField(default=[37.4026616, 127.1010097])
+
+
 class AirKoreaData(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True, blank=True, null=False)  # Field name made lowercase.
     cograde = models.IntegerField(db_column='coGrade', blank=True, null=True)  # Field name made lowercase.
@@ -23,21 +38,6 @@ class AirKoreaData(models.Model):
     pm25value24 = models.IntegerField(db_column='pm25Value24', blank=True, null=True)  # Field name made lowercase.
     so2grade = models.IntegerField(db_column='so2Grade', blank=True, null=True)  # Field name made lowercase.
     so2value = models.TextField(db_column='so2Value', blank=True, null=True)  # Field name made lowercase.
-    stnfk = models.ForeignKey(db_column='stnfk', to='AirKoreaStations', on_delete=models.CASCADE, null=True, blank=True)
+    stnfk = models.ForeignKey(AirKoreaStations, on_delete=models.CASCADE)
 
-
-
-class AirKoreaStations(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True, blank=True, null=False)  # Field name made lowercase.
-    addr = models.TextField(blank=True, null=True)
-    dmx = models.DecimalField(db_column='dmX', blank=True, null=True, decimal_places=10, max_digits=15)  # Field name made lowercase.
-    dmy = models.DecimalField(db_column='dmY', blank=True, null=True, decimal_places=10, max_digits=15)  # Field name made lowercase.
-    item = models.TextField(blank=True, null=True)
-    mangname = models.TextField(db_column='mangName', blank=True, null=True)  # Field name made lowercase.
-    map = models.TextField(blank=True, null=True)
-    oper = models.TextField(blank=True, null=True)
-    photo = models.TextField(blank=True, null=True)
-    stationname = models.TextField(db_column='stationName', blank=True, null=True)  # Field name made lowercase.
-    year = models.TextField(blank=True, null=True)
-    geom = PointField(default=[37.4026616, 127.1010097])
 
