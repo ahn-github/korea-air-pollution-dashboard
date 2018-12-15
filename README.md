@@ -21,3 +21,14 @@ pip install below packages
 * django
 * django-leaflet
 * django-geojson
+
+#### Related Tools and Docs
+
+* django : https://www.djangoproject.com/
+* bootstrap : https://getbootstrap.com/
+* charts.js : https://www.chartjs.org/
+* leaflet.js : https://leafletjs.com/
+
+*공공데이터 포털 : https://www.data.go.kr/
+    * 한국환경공단_측정소정보 조회 서비스 : https://www.data.go.kr/dataset/15000660/openapi.do
+    * 한국환경공단_대기오염정보 조회 서비스 : https://www.data.go.kr/dataset/15000581/openapi.do

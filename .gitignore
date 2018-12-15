@@ -2,7 +2,6 @@
 # Edit at https://www.gitignore.io/?templates=django
 
 ### Django ###
-.idea/*
 secret.json
 *.log
 *.pot
@@ -127,5 +126,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# IDEA config files
+.idea/
 
 # End of https://www.gitignore.io/api/django
