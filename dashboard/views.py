@@ -3,8 +3,8 @@ from .models import AirKoreaStations, AirKoreaData
 from datetime import datetime as dt
 from djgeojson.views import GeoJSONLayerView
 from datetime import timedelta
-import json
-
+from django.db.models import Count, Max
+from django.db.models.functions import Substr
 
 def index(request):
     yesterday = dt.now().replace(microsecond=0,second=0,minute=0, hour=0)
@@ -58,3 +58,10 @@ def list_table(request, status):
     stations = AirKoreaStations.objects.filter(id__in=stations_list)
 
     return render(request, "dashboard/list.html", {"status": status, "Stations": stations})
+
+def stations_stat(request):
+    mangname_count = AirKoreaStations.objects.values('mangname').annotate(total=Count('mangname')).order_by('-total')
+    area_count = AirKoreaStations.objects.values('addr').annotate(area=Substr('addr', 1, 2)).values('area').annotate(total=Count('area')).order_by('-total')
+
+    return render(request, "dashboard/stat.html", {"mangname_count": mangname_count, "area_count" :area_count})
+

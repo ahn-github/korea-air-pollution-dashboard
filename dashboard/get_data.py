@@ -52,7 +52,7 @@ if __name__ == "__main__":
         user_agent_url = 'http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/' + \
                          'getMsrstnAcctoRltmMesureDnsty?serviceKey=' + OPEN_API_KEY + \
                          '&numOfRows=9999&pageSize=9999&pageNo=1' + \
-                         '&startPage=1&stationName=' + stnName + '&dataTerm=3MONTH&ver=1.3'
+                         '&startPage=1&stationName=' + stnName + '&dataTerm=DAILY&ver=1.3'
         xml_data = requests.get(user_agent_url).content
         root = ET.XML(xml_data)
         df = []
@@ -64,7 +64,7 @@ if __name__ == "__main__":
                         parsed[col] = item.find(col).text
                     df.append(parsed)
         df = pd.DataFrame(df)
-        df['stnfk'] = stnName_dict[stnName]
+        df['stnfk_id'] = stnName_dict[stnName]
         try:
             df.dataTime = df.dataTime.apply(my_to_datetime)
             df.to_sql('dashboard_airkoreadata', con=con, if_exists='append', index=False)
