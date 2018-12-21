@@ -20,7 +20,7 @@ class AirKoreaData(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True, blank=True, null=False)  # Field name made lowercase.
     cograde = models.IntegerField(db_column='coGrade', blank=True, null=True)  # Field name made lowercase.
     covalue = models.TextField(db_column='coValue', blank=True, null=True)  # Field name made lowercase.
-    datatime = models.TextField(db_column='dataTime', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
+    datatime = models.DateTimeField(db_column='dataTime', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
     khaigrade = models.IntegerField(db_column='khaiGrade', blank=True, null=True)  # Field name made lowercase.
     khaivalue = models.IntegerField(db_column='khaiValue', blank=True, null=True)  # Field name made lowercase.
     mangname = models.TextField(db_column='mangName', blank=True, null=True)  # Field name made lowercase.

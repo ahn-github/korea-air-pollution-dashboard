@@ -3,6 +3,7 @@
 
 ### Django ###
 secret.json
+my_model.h5
 *.log
 *.pot
 *.pyc

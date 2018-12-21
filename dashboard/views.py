@@ -5,6 +5,9 @@ from djgeojson.views import GeoJSONLayerView
 from datetime import timedelta
 from django.db.models import Count, Max
 from django.db.models.functions import Substr
+from keras.models import load_model
+import numpy as np
+from keras import backend as K
 
 def index(request):
     yesterday = dt.now().replace(microsecond=0,second=0,minute=0, hour=0)
@@ -37,7 +40,23 @@ def detail(request, station_name):
     recent_data = AirKoreaData.objects.filter(stnfk__stationname=station_name).\
         filter(datatime__range=(yesterday - timedelta(days=1), yesterday)).order_by('datatime')
 
-    return render(request, "dashboard/detail.html", {'recent_data': recent_data})
+    model = load_model('my_model.h5')
+    x = list(recent_data.values_list('pm25value', flat=True))
+    x = np.array(x[-24:])
+
+    x = x.reshape(-1, 24, 1)
+
+    y_pred = model.predict(x / 200)
+    y_pred = y_pred[0] * 200
+
+    K.clear_session()
+
+    forecast_dt = []
+    for i in range(1, 7):
+        forecast_dt.append(yesterday + timedelta(hours=i))
+
+    return render(request, "dashboard/detail.html", {'recent_data': recent_data, 'forecast': y_pred,
+                                                     'forecast_dt' : forecast_dt})
 
 
 def list_table(request, status):
