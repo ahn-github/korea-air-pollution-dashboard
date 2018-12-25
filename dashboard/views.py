@@ -43,12 +43,11 @@ def detail(request, station_name):
     model = load_model('my_model.h5')
     x = list(recent_data.values_list('pm25value', flat=True))
     x = np.array(x[-24:])
-
     x = x.reshape(-1, 24, 1)
 
     y_pred = model.predict(x / 200)
     y_pred = y_pred[0] * 200
-
+    y_pred = np.round(y_pred)
     K.clear_session()
 
     forecast_dt = []
